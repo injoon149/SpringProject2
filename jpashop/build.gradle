@@ -1,8 +1,19 @@
+//querydsl 추가
+buildscript {
+	dependencies {
+		classpath("gradle.plugin.com.ewerk.gradle.plugins:querydsl-plugin:1.0.10")
+	}
+}
+
 plugins {
 	id 'java'
 	id 'org.springframework.boot' version '2.7.13'
 	id 'io.spring.dependency-management' version '1.0.15.RELEASE'
 }
+
+//querydsl 추가
+apply plugin: 'io.spring.dependency-management'
+apply plugin: "com.ewerk.gradle.plugins.querydsl"
 
 group = 'jpabook'
 version = '0.0.1-SNAPSHOT'
@@ -29,13 +40,41 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-devtools'
 	implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.5.6'
 	implementation 'com.fasterxml.jackson.datatype:jackson-datatype-hibernate5'
+	//querydsl 추가
+	implementation 'com.querydsl:querydsl-jpa'
+	//querydsl 추가
+	implementation 'com.querydsl:querydsl-apt'
 	compileOnly 'org.projectlombok:lombok'
-	runtimeOnly 'com.mysql:mysql-connector-j:8.0.31'
+	runtimeOnly 'com.h2database:h2'
+	//runtimeOnly 'com.mysql:mysql-connector-j:8.0.31'
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation("org.junit.vintage:junit-vintage-engine") {
 		exclude group: "org.hamcrest", module: "hamcrest-core"
 	}
+}
+
+//querydsl 추가
+//def querydslDir = 'src/main/generated'
+def querydslDir = "$buildDir/generated/querydsl"
+querydsl {
+	library = "com.querydsl:querydsl-apt"
+	jpa = true
+	querydslSourcesDir = querydslDir
+}
+
+sourceSets {
+	main {
+		java {
+			srcDirs = ['src/main/java', querydslDir]
+		}
+	}
+}
+compileQuerydsl{
+	options.annotationProcessorPath = configurations.querydsl
+}
+configurations {
+	querydsl.extendsFrom compileClasspath
 }
 
 test {

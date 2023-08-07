@@ -1,5 +1,6 @@
 package jpabook.jpashop.service;
 
+import com.querydsl.jpa.impl.JPAQueryFactory;
 import jpabook.jpashop.domain.*;
 import jpabook.jpashop.domain.item.Item;
 import jpabook.jpashop.repository.ItemRepository;
@@ -52,8 +53,9 @@ public class OrderService {
     }
 
 
+
     //검색
     public List<Order> findOrders(OrderSearch orderSearch){
-        return orderRepository.findAllByCriteria(orderSearch);
+        return orderRepository.findAll(orderSearch);
     }
 }
