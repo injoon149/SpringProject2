@@ -100,7 +100,7 @@ jobs:
         --application-name injoonApp \
         --deployment-group-name injoon-group \
         --file-exists-behavior OVERWRITE \
-        --s3-location bucket=injoonbucket,bundleType=zip,key=coinTalk.zip \ 
+        --s3-location bucket=injoonbucket,bundleType=zip,key=coinTalk.zip \
         --region ap-northeast-2
         
 
