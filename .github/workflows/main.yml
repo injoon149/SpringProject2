@@ -67,12 +67,12 @@ jobs:
       
       # appspec.yml 파일 복사
     - name: Copy appspec.yml
-      run: cp appspec.yml ./deploy
+      run: cp ./jpashop/appspec.yml ./deploy
 
 
     # script files 복사
     - name: Copy script
-      run: cp ./scripts/*.sh ./deploy
+      run: cp ./jpashop/scripts/*.sh ./deploy
 
     - name: Make zip file
       run: zip -r ./coinTalk.zip ./deploy
