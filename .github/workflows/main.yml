@@ -49,7 +49,7 @@ jobs:
         
     # Jar 파일 복사
     - name: Copy Jar
-      run: cp ./build/libs/*.jar ./deploy
+      run: cp ./jpashop/build/libs/*.jar ./deploy
 
     - name: Make zip file
       run: zip -r ./coinTalk.zip ./deploy
