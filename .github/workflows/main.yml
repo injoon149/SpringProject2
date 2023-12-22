@@ -39,4 +39,8 @@ jobs:
       run: chmod +x ./jpashop/gradlew
     
     - name: Build with Gradle
-      run: ./jpashop/gradlew clean build
+      run: |
+        cd ~/jpashop/   # jpashop 디렉토리로 이동
+        ./gradlew clean build   # Gradle 빌드 실행
+        
+
