@@ -40,7 +40,7 @@ jobs:
     
     - name: Build with Gradle
       run: |
-        cd ~/jpashop/   # jpashop 디렉토리로 이동
+        cd ./jpashop/   # jpashop 디렉토리로 이동
         ./gradlew clean build   # Gradle 빌드 실행
         
 
