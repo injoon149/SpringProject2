@@ -34,10 +34,9 @@ jobs:
         java-version: '11'
         distribution: 'temurin'
         arguments: build
-        build-root-directory: ~/
         
     - name: Grant execute permission for gradlew
-      run: chmod +x jpashop/gradlew
+      run: chmod +x ./jpashop/gradlew
     
     - name: Build with Gradle
-      run: jpashop/gradlew clean build
+      run: ./jpashop/gradlew clean build
