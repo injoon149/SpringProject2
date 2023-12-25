@@ -1,0 +1,106 @@
+name: coinTalk chatRoom server CI/CD
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+env:
+  S3_BUCKET_NAME: injoonbucket
+
+
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Gradle Caching
+      uses: actions/cache@v3
+      with:
+        path: |  
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+        key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+        restore-keys: |
+            ${{ runner.os }}-gradle-
+    - uses: actions/checkout@v3
+    
+    - name: Set up JDK 11
+      uses: actions/setup-java@v3
+      with:
+        java-version: '11'
+        distribution: 'temurin'
+        arguments: build
+        
+    - name: Grant execute permission for gradlew
+      run: chmod +x ./jpashop/gradlew
+    
+    - name: Build with Gradle
+      run: |
+        cd ./jpashop/   # jpashop 디렉토리로 이동
+        ./gradlew clean build   # Gradle 빌드 실행
+
+        # 디렉토리 생성
+    - name: Make Directory
+      run: mkdir -p deploy
+        
+    # Jar 파일 복사
+    - name: Copy Jar
+      run: cp ./jpashop/build/libs/*.jar ./deploy
+
+    - name: Make zip file
+      run: zip -r ./coinTalk.zip ./deploy
+      shell: bash
+
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: ap-northeast-2
+
+    - name: Upload to S3
+      run: aws s3 cp --region ap-northeast-2 ./coinTalk.zip s3://$S3_BUCKET_NAME/
+      
+      # appspec.yml 파일 복사
+    - name: Copy appspec.yml
+      run: cp ./jpashop/appspec.yml ./deploy
+
+
+    # script files 복사
+    - name: Copy script
+      run: cp ./jpashop/scripts/*.sh ./deploy
+
+    - name: Make zip file
+      run: zip -r ./coinTalk.zip ./deploy
+      shell: bash
+
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: ap-northeast-2
+
+    - name: Upload to S3
+      run: aws s3 cp --region ap-northeast-2 ./coinTalk.zip s3://$S3_BUCKET_NAME/
+
+
+
+    # Deploy
+    - name: Deploy
+      env:
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      run: |
+        aws --debug deploy create-deployment \
+        --application-name injoonApp \
+        --deployment-group-name injoon-group \
+        --file-exists-behavior OVERWRITE \
+        --s3-location bucket=injoonbucket,bundleType=zip,key=coinTalk.zip \
+        --region ap-northeast-2
+        
+
