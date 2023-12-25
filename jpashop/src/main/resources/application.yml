@@ -1,17 +1,21 @@
-spring:
-  logging.level:
-    org.hibernate.SQL: debug
-  datasource: #띄어쓰기 2칸
-    url: jdbc:h2:tcp://localhost/~/jpashop #4칸
-    username: sa
-    password:
-    driver-class-name: org.h2.Driver
-  jpa:
-    hibernate:
-      ddl-auto: create
-    properties:
-      hibernate:
-        format-sql: true
-        default_batch_fetch_size: 1000
-logging.level: #띄어쓰기 없음
-  org.hibernate.SQL: debug
+#spring:
+#  logging.level:
+#    org.hibernate.SQL: debug
+#  datasource: #띄어쓰기 2칸
+#    url: jdbc:h2:tcp://localhost/~/jpashop #4칸
+#    username: sa
+#    password:
+#    driver-class-name: org.h2.Driver
+#  jpa:
+#    hibernate:
+#      ddl-auto: create
+#    properties:
+#      hibernate:
+#        format-sql: true
+#        default_batch_fetch_size: 1000
+#logging.level: #띄어쓰기 없음
+#  org.hibernate.SQL: debug
+
+
+
+

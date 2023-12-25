@@ -45,8 +45,8 @@ dependencies {
 	//querydsl 추가
 	implementation 'com.querydsl:querydsl-apt'
 	compileOnly 'org.projectlombok:lombok'
-	runtimeOnly 'com.h2database:h2'
-	//runtimeOnly 'com.mysql:mysql-connector-j:8.0.31'
+	//runtimeOnly 'com.h2database:h2'
+	runtimeOnly 'com.mysql:mysql-connector-j:8.0.31'
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation("org.junit.vintage:junit-vintage-engine") {
